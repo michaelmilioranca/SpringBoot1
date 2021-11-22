@@ -1,5 +1,7 @@
 package br.com.alura.forum.config.security;
 
+import br.com.alura.forum.config.TokenService;
+import br.com.alura.forum.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,8 +21,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final AutenticacaoService autenticacaoService;
 
-    public SecurityConfiguration(AutenticacaoService autenticacaoService) {
+    private final TokenService tokenService;
+
+    private final UsuarioRepository usuarioRepository;
+
+    public SecurityConfiguration(AutenticacaoService autenticacaoService, TokenService tokenService, UsuarioRepository usuarioRepository) {
         this.autenticacaoService = autenticacaoService;
+        this.tokenService = tokenService;
+        this.usuarioRepository = usuarioRepository;
     }
     // Isso aqui é porque o authentication manager não é injetado automático, por isso é criado o bean
     @Override
@@ -47,7 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable() // Disabilitado pois ao utilizar JWT ñ há necessidade de validar CSRF
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(new AutenticacaoViaTokenFilter(), UsernamePasswordAuthenticationFilter.class); // tem que usar o before pois o srping aplica o username como padrão primeiro
+                .addFilterBefore(new AutenticacaoViaTokenFilter(this.tokenService, this.usuarioRepository), UsernamePasswordAuthenticationFilter.class); // tem que usar o before pois o srping aplica o username como padrão primeiro
     }
 
     //Configuração de recursos estáticos( js, css, imagem, etc)
