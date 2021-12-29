@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -71,6 +72,7 @@ public class TopicosController {
         return topico.isPresent() ? ResponseEntity.ok(new TopicoDto(form.atualizar (id, topicoRepository))) : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_MODERADOR')")
     @Transactional
     @DeleteMapping("/{id}")
     @CacheEvict(value = "lista-topicos", allEntries = true)
