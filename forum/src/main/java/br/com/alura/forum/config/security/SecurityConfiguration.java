@@ -30,6 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.tokenService = tokenService;
         this.usuarioRepository = usuarioRepository;
     }
+
     // Isso aqui é porque o authentication manager não é injetado automático, por isso é criado o bean
     @Override
     @Bean
@@ -62,7 +63,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //Configuração de recursos estáticos( js, css, imagem, etc)
     @Override
     public void configure(WebSecurity web) throws Exception {
-     }
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
+    }
 
     /* Gerar senha criptografada
     public static void main(String[] args) {
