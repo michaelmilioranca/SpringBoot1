@@ -1,19 +1,23 @@
 package br.com.alura.forum.repository;
 
+import br.com.alura.forum.Annotation.SqlCurso;
 import br.com.alura.forum.modelo.Curso;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DataJpaTest
-class CursoRepositoryTest {
+@Sql
+class CursoRepositoryTest extends BaseRepositoryTest {
 
     @Autowired
     private CursoRepository repository;
 
     @Test
+    @SqlCurso
     void deveBuscarPorNomeDeCurso() {
         Curso curso = repository.findByNome("HTML 5");
         assertNotNull(curso);
@@ -21,9 +25,10 @@ class CursoRepositoryTest {
     }
 
     @Test
+    @SqlCurso
     void deveRetornarNullQuandoNaoEncontrarCurso() {
         Curso curso = repository.findByNome("JPA");
-        assertNull(curso);
+        Assertions.assertNull(curso);
     }
 
 }

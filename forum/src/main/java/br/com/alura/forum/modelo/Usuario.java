@@ -1,6 +1,8 @@
 package br.com.alura.forum.modelo;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Entity
 @EqualsAndHashCode
+@Getter
+@Setter
 public class Usuario implements UserDetails {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,38 +23,6 @@ public class Usuario implements UserDetails {
 	private String senha;
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Perfil> perfis;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
